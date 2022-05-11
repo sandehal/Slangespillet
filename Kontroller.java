@@ -21,7 +21,6 @@ public class Kontroller {
         gui = new Gui(this, yPos, xPos);
         modell = new Modell(gui, this, yPos, xPos);
         System.out.println("Spawn: " + yPos + ":" + xPos);
-        BakgrunnsMusikk.startMusikk();
         startSpill(modell, xPos, yPos);
         lastAllMat(modell);
     }

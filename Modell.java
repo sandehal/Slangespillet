@@ -19,7 +19,7 @@ public class Modell {
     int xPos;
     int totalLengde;
     int lengdeKropp;
-    ArrayList<String> slange = new ArrayList<>();
+    String[] slange;
 
     Modell(Gui gui, Kontroller kontroller, int yPos, int xPos) {
         this.gui = gui;
@@ -29,6 +29,7 @@ public class Modell {
         lengdeKropp = 0;
         totalLengde = lengdeKropp + 1;
         ruteNett = new String[12][12];
+        slange = new String[lengdeKropp];
 
         for (int rad = 0; rad < 12; rad++) {
             for(int kol = 0; kol < 12; kol++) {
@@ -45,17 +46,40 @@ public class Modell {
     void flyttRetning() {
         if (retning.equals("NORD")) {
             try {
-                ruteNett[yPos][xPos] = "";
-                yPos = yPos-1;
-                if (ruteNett[yPos][xPos].equals("$")) {
-                    ruteNett[yPos+1][xPos] = "+";
+                if (lengdeKropp <= 1) {
+                    ruteNett[yPos][xPos] = "";
+                }
+                else {
+                    for (int i = 0; i < slange.length-1; i++) {
+                        slange[i] = slange[i++];
+                    }
+
+                }
+                
+                if (ruteNett[yPos-1][xPos].equals("$")) {
+                    lengdeKropp++;
+                    totalLengde++;
+                    String[] tempSlange = new String[slange.length];
+                    for (int i = 0; i < slange.length; i++) {
+                        tempSlange[i] = slange[i];
+                    }
+                    slange = new String[lengdeKropp];
+                    
+                    for (int i = 0; i < tempSlange.length; i++) {
+                        slange[i] = tempSlange[i];
+                    }
+                    System.out.println("IndeksFeil");
+                    slange[lengdeKropp-1] = ruteNett[yPos][xPos];
                     gui.okLengde();
                     this.genererMat();
+                    
                 }
+                yPos = yPos - 1;
                 ruteNett[yPos][xPos] = "o";
                 gui.bevegNord();
             } catch (IndexOutOfBoundsException e) {
                 Kontroller.erFerdig = true ;
+                // System.out.println("IndeksFeil");
             }
             
         }
@@ -64,7 +88,6 @@ public class Modell {
                 ruteNett[yPos][xPos] = "";
                 yPos = yPos+1;
                 if (ruteNett[yPos][xPos].equals("$")) {
-                    ruteNett[yPos-1][xPos] = "+";
                     this.genererMat();
                     gui.okLengde();
                 }
@@ -80,7 +103,6 @@ public class Modell {
                 ruteNett[yPos][xPos] = "";
                 xPos = xPos-1;
                 if (ruteNett[yPos][xPos].equals("$")) {
-                    ruteNett[yPos][xPos+1] = "+";
                     this.genererMat();
                     gui.okLengde();
                 }
@@ -96,7 +118,6 @@ public class Modell {
                 ruteNett[yPos][xPos] = "";
                 xPos = xPos+1;
                 if (ruteNett[yPos][xPos].equals("$")) {
-                    ruteNett[yPos][xPos-1] = "+";
                     this.genererMat();
                     gui.okLengde();
                 }

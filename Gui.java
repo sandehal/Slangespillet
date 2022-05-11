@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.basic.BasicArrowButton;
 
 public class Gui {
     public static void main(String[] args) {
@@ -21,11 +22,13 @@ public class Gui {
     int xPos;
     int yPos;
     int kroppsLengde = 1;
+    JLabel[] slange;
 
     Gui(Kontroller kontroller, int a, int b) {
         this.kontroller = kontroller;
         this.xPos = b;
         this.yPos = a;
+        slange = new JLabel[kroppsLengde-1];
 
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -47,6 +50,8 @@ public class Gui {
         styring = new JPanel();
         styring.setLayout(new BorderLayout());
         styring.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        styring.setOpaque(true);
+        styring.setBackground(Color.BLACK);
         totalPanel.add(styring, BorderLayout.SOUTH);
 
         ruteNett = new JPanel();
@@ -59,6 +64,7 @@ public class Gui {
             for (JLabel label : labels) {
                 label = new JLabel("");
                 label.setOpaque(true);
+                label.setBackground(Color.RED);
                 ruter[rad][kol] = label;
                 label.setPreferredSize(new Dimension(30,30));
                 label.setHorizontalAlignment(JLabel.CENTER);
@@ -81,6 +87,8 @@ public class Gui {
         konsoll = new JPanel();
         konsoll.setLayout(new BorderLayout());
         konsoll.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        konsoll.setOpaque(true);
+        konsoll.setBackground(Color.BLACK);
         styring.add(konsoll, BorderLayout.CENTER);
         JButton nord = new JButton("Opp");
         nord.setPreferredSize(new Dimension(20, 40));
@@ -90,7 +98,7 @@ public class Gui {
                 kontroller.gaaNord();
             }
         }
-        JButton ost = new JButton("-->");
+        JButton ost = new JButton("Hoyre");
         ost.setPreferredSize(new Dimension(50, 50));
         class gaaOst implements ActionListener {
             @Override
@@ -106,7 +114,7 @@ public class Gui {
                 kontroller.gaaSor();
             }
         }
-        JButton vest = new JButton("<--");
+        JButton vest = new JButton("Venstre");
         vest.setPreferredSize(new Dimension(50, 50));
         class gaaVest implements ActionListener {
             @Override
@@ -149,7 +157,7 @@ public class Gui {
 
     void bevegNord() {
         ruter[yPos][xPos].setText("");
-        ruter[yPos][xPos].setBackground(new Color(238, 238, 238));
+        ruter[yPos][xPos].setBackground(Color.RED);
                 yPos = yPos-1;
         try {
             if (ruter[yPos][xPos].getText().equals("$")) {
@@ -164,7 +172,7 @@ public class Gui {
 
     void bevegSor() {
         ruter[yPos][xPos].setText("");
-        ruter[yPos][xPos].setBackground(new Color(238, 238, 238));
+        ruter[yPos][xPos].setBackground(Color.RED);
                 yPos = yPos+1;
         try {
             if (ruter[yPos][xPos].getText().equals("$")) {
@@ -179,7 +187,7 @@ public class Gui {
 
     void bevegVest() {
         ruter[yPos][xPos].setText("");
-        ruter[yPos][xPos].setBackground(new Color(238, 238, 238));
+        ruter[yPos][xPos].setBackground(Color.RED);
                 xPos = xPos - 1;
         try {
             if (ruter[yPos][xPos].getText().equals("$")) {
@@ -194,7 +202,7 @@ public class Gui {
 
     void bevegOst() {
         ruter[yPos][xPos].setText("");
-        ruter[yPos][xPos].setBackground(new Color(238, 238, 238));
+        ruter[yPos][xPos].setBackground(Color.RED);
         xPos = xPos + 1;
         try {
             if (ruter[yPos][xPos].getText().equals("$")) {

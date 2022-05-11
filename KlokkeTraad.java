@@ -9,7 +9,7 @@ public class KlokkeTraad implements Runnable{
         try {
             while(!Kontroller.erFerdig) {
                 modell.flyttRetning();
-                Thread.sleep(8000);
+                Thread.sleep(800);
             }
         } catch (InterruptedException e) {
             return;
