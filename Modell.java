@@ -19,7 +19,8 @@ public class Modell {
     int xPos;
     int totalLengde;
     int lengdeKropp;
-    String[] slange;
+    int[] y;
+    int[] x;
 
     Modell(Gui gui, Kontroller kontroller, int yPos, int xPos) {
         this.gui = gui;
@@ -29,7 +30,8 @@ public class Modell {
         lengdeKropp = 0;
         totalLengde = lengdeKropp + 1;
         ruteNett = new String[12][12];
-        slange = new String[lengdeKropp];
+        y = new int[200];
+        x = new int[200];
 
         for (int rad = 0; rad < 12; rad++) {
             for(int kol = 0; kol < 12; kol++) {
@@ -39,94 +41,64 @@ public class Modell {
     }
 
     void start(int a, int b) {
-        ruteNett[a][b] = "o";
-        gui.start();
+        y[0] = a;
+        x[0] = b;
     }
 
     void flyttRetning() {
-        if (retning.equals("NORD")) {
-            try {
-                if (lengdeKropp <= 1) {
-                    ruteNett[yPos][xPos] = "";
-                }
-                else {
-                    for (int i = 0; i < slange.length-1; i++) {
-                        slange[i] = slange[i++];
-                    }
-
-                }
-                
-                if (ruteNett[yPos-1][xPos].equals("$")) {
-                    lengdeKropp++;
-                    totalLengde++;
-                    String[] tempSlange = new String[slange.length];
-                    for (int i = 0; i < slange.length; i++) {
-                        tempSlange[i] = slange[i];
-                    }
-                    slange = new String[lengdeKropp];
-                    
-                    for (int i = 0; i < tempSlange.length; i++) {
-                        slange[i] = tempSlange[i];
-                    }
-                    System.out.println("IndeksFeil");
-                    slange[lengdeKropp-1] = ruteNett[yPos][xPos];
-                    gui.okLengde();
-                    this.genererMat();
-                    
-                }
-                yPos = yPos - 1;
-                ruteNett[yPos][xPos] = "o";
-                gui.bevegNord();
-            } catch (IndexOutOfBoundsException e) {
-                Kontroller.erFerdig = true ;
-                // System.out.println("IndeksFeil");
+        try {
+            for (int i=totalLengde+1; i > 1; i--) {
+                x[i] = x[i-1];
+                y[i] = y[i-1];
             }
-            
-        }
-        else if (retning.equals("SOR")) {
-            try {
-                ruteNett[yPos][xPos] = "";
-                yPos = yPos+1;
-                if (ruteNett[yPos][xPos].equals("$")) {
-                    this.genererMat();
-                    gui.okLengde();
-                }
-                ruteNett[yPos][xPos] = "o";
-                gui.bevegSor();
-            } catch (IndexOutOfBoundsException e) {
-                Kontroller.erFerdig = true ;
+            int yForrige = y[0];
+            int xForrige = x[0];
+            if (retning.equals("NORD")) {
+                y[0] = y[0]-1;
             }
-        }
-
-        else if (retning.equals("VEST")) {
-            try {
-                ruteNett[yPos][xPos] = "";
-                xPos = xPos-1;
-                if (ruteNett[yPos][xPos].equals("$")) {
-                    this.genererMat();
-                    gui.okLengde();
-                }
-                ruteNett[yPos][xPos] = "o";
-                gui.bevegVest();
-            } catch (IndexOutOfBoundsException e) {
-                Kontroller.erFerdig = true ;
+            if (retning.equals("SOR")) {
+                y[0] = y[0] + 1;
             }
-        }
-
-        else if (retning.equals("OST")) {
-            try {
-                ruteNett[yPos][xPos] = "";
-                xPos = xPos+1;
-                if (ruteNett[yPos][xPos].equals("$")) {
-                    this.genererMat();
-                    gui.okLengde();
-                }
-                ruteNett[yPos][xPos] = "o";
-                gui.bevegOst();
-            } catch (IndexOutOfBoundsException e) {
-                Kontroller.erFerdig = true ;
+    
+            if (retning.equals("VEST")) {
+                x[0] = x[0] - 1;
             }
+    
+            if (retning.equals("OST")) {
+                x[0] = x[0] + 1;
+            }
+            if (ruteNett[y[0]][x[0]].equals("$")) {
+                ruteNett[y[0]][x[0]] = "";
+                this.genererMat();
+                this.okLengde();
+                for (int i=totalLengde+1; i > 1; i--) {
+                    y[i+1] = y[i];
+                    x[i+1] = x[i];
+                }
+                // y[totalLengde] = y[totalLengde-1]-1;
+                // x[totalLengde] = x[totalLengde-1]-1;
+            }
+            else {
+                for(int i = totalLengde+1; i < 2; i--) {
+                    y[i] = y[i-1];
+                    x[i] = x[i-1];
+                }
+            }
+            y[1] = yForrige;
+            x[1] = xForrige;
+            if (totalLengde == 20) {
+                Kontroller.settHastighet(Kontroller.hentHastighet()*0.99);
+            }
+            if (totalLengde == 40) {
+                Kontroller.settHastighet(Kontroller.hentHastighet()*0.98);
+            }
+            gui.notifiserGUI(y, x);
+            gui.visSlange();
+        } catch(IndexOutOfBoundsException e) {
+            kontroller.spillFerdig();
+            Kontroller.erFerdig = true;
         }
+        
     }
 
     void lastAllMat() {
@@ -153,14 +125,9 @@ public class Modell {
         gui.visMat(yAkse, xAkse);
     }
 
-    void okLengde() {
-        
-    }
-
-    void spistMat() {
-        lengdeKropp += 1;
+    private void okLengde() {
+        totalLengde++;
+        lengdeKropp++;
         gui.okLengde();
     }
-
-    
 }

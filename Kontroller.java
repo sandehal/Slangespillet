@@ -11,6 +11,7 @@ public class Kontroller {
     Gui gui;
     Modell modell;
     int mat = 10;
+    static double hastighet = 300;
     
     static boolean erFerdig = false;
 
@@ -20,9 +21,8 @@ public class Kontroller {
         
         gui = new Gui(this, yPos, xPos);
         modell = new Modell(gui, this, yPos, xPos);
-        System.out.println("Spawn: " + yPos + ":" + xPos);
-        startSpill(modell, xPos, yPos);
         lastAllMat(modell);
+        startSpill(modell, xPos, yPos);
     }
 
     static void startSpill(Modell modell, int a, int b) {
@@ -54,12 +54,17 @@ public class Kontroller {
     void avsluttSpillet() {
         System.exit(0);
     }
-
-    void okLengde() {
-        modell.okLengde();
+    void spillFerdig() {
+        gui.visSluttMeny();
     }
     static int trekk (int a, int b) {
         // Trekk et tilfeldig heltall i intervallet [a..b];
         return (int)(Math.random()*(b-a+1))+a;
 }
+    static double hentHastighet() {
+        return hastighet;
+    }
+    static void settHastighet(double fart) {
+        hastighet = fart;
+    }
 }
