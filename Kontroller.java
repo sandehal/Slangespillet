@@ -18,7 +18,7 @@ public class Kontroller {
     public Kontroller() {
         int yPos = trekk(5, 11);
         int xPos = trekk(2, 9);
-        
+        erFerdig = false;
         gui = new Gui(this, yPos, xPos);
         modell = new Modell(gui, this, yPos, xPos);
         lastAllMat(modell);

@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.basic.BasicArrowButton;
 
@@ -21,7 +22,7 @@ public class Gui {
     JPanel totalPanel, styring, konsoll, ruteNett, lengde, avslutt;
     static JLabel ruter[][] = new JLabel[12][12];
     JLabel storrelseTeller = new JLabel("");
-    JButton stopp;
+    JButton stopp, nyttSpill;
     int xPos;
     int yPos;
     int totalLengde = 1;
@@ -62,8 +63,9 @@ public class Gui {
 
         vindu = new JFrame("SNAKE IV: A NEW SNAKE");
         vindu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        sluttMeny = new JFrame();
+        sluttMeny = new JFrame("Meny");
         sluttMeny.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        sluttMeny.setPreferredSize(new Dimension(230, 200));
 
 
         //Lag 1
@@ -245,11 +247,29 @@ public class Gui {
     }
     void visSluttMeny() {
         JPanel tekstPanel = new JPanel();
+        tekstPanel.setLayout(new BorderLayout());
         sluttMeny.add(tekstPanel);
         JLabel beskjed = new JLabel("Spillet er ferdig");
-        sluttMeny.add(beskjed);
+        tekstPanel.add(beskjed, BorderLayout.CENTER);
+        JPanel knappePanel = new JPanel();
+        knappePanel.setLayout(new BorderLayout());
+        knappePanel.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+        sluttMeny.add(knappePanel, BorderLayout.SOUTH);
         sluttMeny.pack();
         sluttMeny.setVisible(true);
 
+        nyttSpill = new JButton("Nytt spill");
+        class restart implements ActionListener {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                vindu.dispose();
+                sluttMeny.dispose();
+                Kontroller kontroller = new Kontroller();
+                
+            }
+        }
+        nyttSpill.addActionListener(new restart());
+        knappePanel.add(nyttSpill, BorderLayout.WEST);
+        knappePanel.add(stopp, BorderLayout.EAST);
     }
 }
